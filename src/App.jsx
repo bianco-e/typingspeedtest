@@ -4,6 +4,7 @@ import useInterval from "./hooks/useInterval";
 
 function App() {
   const [chosenQuote, setChosenQuote] = useState("");
+  const [quoteAuthor, setQuoteAuthor] = useState("");
   const [timerTrigger, setTimerTrigger] = useState(false);
   const [time, setTime] = useState(0);
   const [answer, setAnswer] = useState("");
@@ -12,7 +13,10 @@ function App() {
   const getQuote = () => {
     fetch("https://favqs.com/api/qotd")
       .then((response) => response.json())
-      .then((data) => setChosenQuote(data.quote.body))
+      .then((data) => {
+        setChosenQuote(data.quote.body);
+        setQuoteAuthor(data.quote.author);
+      })
       .catch((err) => {
         console.log(err);
       });
@@ -72,7 +76,8 @@ function App() {
   return (
     <Wrapper>
       <Text size="22px">{time}</Text>
-      {chosenQuote && <Text>{`The quote has ${getQuoteLength()} chars`}</Text>}
+      {chosenQuote && <Text>{`Length: ${getQuoteLength()} chars`}</Text>}
+      {chosenQuote && <Text>{`Author: ${quoteAuthor}`}</Text>}
       <Text size="20px">{chosenQuote || "Loading quote..."}</Text>
       <TextArea
         placeholder="Write the quote here and press enter"
